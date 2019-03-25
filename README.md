@@ -109,7 +109,7 @@ cd ..
 ### Running on the CPU
 
 When running Intel® Distribution of OpenVINO™ toolkit Python applications on the CPU, the CPU extension library is required. This can be found at 
-```/opt/intel/computer_vision_sdk/deployment_tools/inference_engine/lib/ubuntu_16.04/intel64/``` after building the OpenVINO examples.
+```/opt/intel/computer_vision_sdk/deployment_tools/inference_engine/lib/ubuntu_16.04/intel64/``` after building the Intel® Distribution of OpenVINO™ toolkit examples.
 
 Though by default the application runs on CPU, this can also be explicitly specified by -d CPU command-line argument:
 
