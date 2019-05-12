@@ -72,8 +72,8 @@ def args_parser():
                         "path to a shared library with the kernels impl.")
     parser.add_argument("-d", "--device", default="CPU", type=str,
                         help="Specify the target device to infer on; "
-                        "CPU, GPU, FPGA or MYRIAD is acceptable. Looks"
-                        "for a suitable plugin for device specified"
+                        "CPU, GPU, FPGA, HDDL or MYRIAD is acceptable. Application "
+                        "will look for a suitable plugin for device specified"
                         "(CPU by default)")
     parser.add_argument("-c", "--confidence", default=0.5, type=float,
                         help="Probability threshold for detections filtering")
