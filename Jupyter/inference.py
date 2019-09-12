@@ -25,7 +25,7 @@
 import os
 import sys
 import logging as log
-from openvino.inference_engine import IENetwork, IEPlugin
+from openvino.inference_engine import IENetwork, IECore
 
 
 class Network:
@@ -61,26 +61,26 @@ class Network:
         # and load extensions library if specified
         if not plugin:
             log.info("Initializing plugin for {} device...".format(device))
-            self.plugin = IEPlugin(device=device)
+            self.plugin = IECore()
         else:
             self.plugin = plugin
 
         if cpu_extension and 'CPU' in device:
-            self.plugin.add_cpu_extension(cpu_extension)
+            self.plugin.add_extension(cpu_extension, "CPU")
 
         # Read IR
         log.info("Reading IR...")
         self.net = IENetwork(model=model_xml, weights=model_bin)
         log.info("Loading IR to the plugin...")
 
-        if self.plugin.device == "CPU":
-            supported_layers = self.plugin.get_supported_layers(self.net)
+        if "CPU" in device:
+            supported_layers = self.plugin.query_network(self.net, "CPU")
             not_supported_layers = \
                 [l for l in self.net.layers.keys() if l not in supported_layers]
             if len(not_supported_layers) != 0:
                 log.error("Following layers are not supported by "
                           "the plugin for specified device {}:\n {}".
-                          format(self.plugin.device,
+                          format(device,
                                  ', '.join(not_supported_layers)))
                 log.error("Please try to specify cpu extensions library path"
                           " in command line parameters using -l "
@@ -89,9 +89,9 @@ class Network:
 
         if num_requests == 0:
             # Loads network read from IR to the plugin
-            self.net_plugin = self.plugin.load(network=self.net)
+            self.net_plugin = self.plugin.load_network(network=self.net, device_name=device)
         else:
-            self.net_plugin = self.plugin.load(network=self.net, num_requests=num_requests)
+            self.net_plugin = self.plugin.load_network(network=self.net, num_requests=num_requests, device_name=device)
 
         self.input_blob = next(iter(self.net.inputs))
         self.out_blob = next(iter(self.net.outputs))
