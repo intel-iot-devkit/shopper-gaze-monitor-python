@@ -30,7 +30,7 @@ This shopper gaze monitor application is designed for a retail shelf mounted cam
 
       uname -a
   
-* Intel® Distribution of OpenVINO™ toolkit 2019 R2 Release
+* Intel® Distribution of OpenVINO™ toolkit 2019 R3 Release
 * Jupyter* Notebook v5.7.0
 
 ## How It works
@@ -71,17 +71,17 @@ Mosquitto is an open source message broker that implements the MQTT protocol. Th
 
 ### Which model to use
 
-This application uses the [face-detection-adas-0001](https://docs.openvinotoolkit.org/2019_R2/_intel_models_face_detection_adas_0001_description_face_detection_adas_0001.html) and [head-pose-estimation-adas-0001](https://docs.openvinotoolkit.org/2019_R2/_intel_models_head_pose_estimation_adas_0001_description_head_pose_estimation_adas_0001.html) Intel® model, that can be downloaded using the **model downloader**. The **model downloader** downloads the __.xml__ and __.bin__ files that is used by the application. 
+This application uses the [face-detection-adas-0001](https://docs.openvinotoolkit.org/2019_R3/_models_intel_face_detection_adas_0001_description_face_detection_adas_0001.html) and [head-pose-estimation-adas-0001](https://docs.openvinotoolkit.org/2019_R3/_models_intel_human_pose_estimation_0001_description_human_pose_estimation_0001.html) Intel® model, that can be downloaded using the **model downloader**. The **model downloader** downloads the __.xml__ and __.bin__ files that is used by the application. 
 
 To install the dependencies of the RI and to download the models Intel® model, run the following command:
 
     cd <path_to_the_shopper-gaze-monitor-python_directory>
     ./setup.sh 
     
-The files will be downloaded inside the following directories:
+The models will be downloaded inside the following directories:
 
-    /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/     
-    /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/ 
+    /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/     
+    /opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/
 
 ### The Config File
 
@@ -151,21 +151,46 @@ You must configure the environment to use the Intel® Distribution of OpenVINO�
     
 __Note__: This command needs to be executed only once in the terminal where the application will be executed. If the terminal is closed, the command needs to be executed again.
 
-## Run the application on Jupyter*
-<!--
-**Note:**<br>
-Before running the application on the FPGA, program the AOCX (bitstream) file. Use the setup_env.sh script from [fpga_support_files.tgz](http://registrationcenter-download.intel.com/akdlm/irc_nas/12954/fpga_support_files.tgz) to set the environment variables.<br>
-For example:
+### Run the Application on Jupyter*
 
-    source /home/<user>/Downloads/fpga_support_files/setup_env.sh
-    
-The bitstreams for HDDL-F can be found under the `/opt/intel/openvino/bitstreams/a10_vision_design_bitstreams` folder.<br>To program the bitstream use the below command:<br>
-    
-    aocl program acl0 /opt/intel/openvino/bitstreams/a10_vision_design_bitstreams/2019R1_PL1_FP11_MobileNet_Clamp.aocx
-    
-For more information on programming the bitstreams, please refer to https://software.intel.com/en-us/articles/OpenVINO-Install-Linux-FPGA#inpage-nav-11 <br>
-<br>
--->
+* Go to the _shopper-gaze-monitor-python_ and open the Jupyter notebook by running the following commands:
+
+  ```
+  cd <path_to_the_shopper-gaze-monitor-python>/Jupyter
+  jupyter notebook
+  ```
+
+  **NOTE**:
+    Before running the application on the FPGA, set the environment variables and  program the AOCX (bitstream) file.<br>
+
+    Set the Board Environment Variable to the proper directory:
+
+    ```
+    export AOCL_BOARD_PACKAGE_ROOT=/opt/intel/openvino/bitstreams/a10_vision_design_sg<#>_bitstreams/BSP/a10_1150_sg<#>
+    ```
+    **NOTE**: If you do not know which version of the board you have, please refer to the product label on the fan cover side or by the product SKU: Mustang-F100-A10-R10 => SG1; Mustang-F100-A10E-R10 => SG2 <br>
+
+    Set the Board Environment Variable to the proper directory: 
+    ```
+    export QUARTUS_ROOTDIR=/home/<user>/intelFPGA/18.1/qprogrammer
+    ```
+    Set the remaining environment variables:
+    ```
+    export PATH=$PATH:/opt/altera/aocl-pro-rte/aclrte-linux64/bin:/opt/altera/aocl-pro-rte/aclrte-linux64/host/linux64/bin:/home/<user>/intelFPGA/18.1/qprogrammer/bin
+    export INTELFPGAOCLSDKROOT=/opt/altera/aocl-pro-rte/aclrte-linux64
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$AOCL_BOARD_PACKAGE_ROOT/linux64/lib
+    export CL_CONTEXT_COMPILER_MODE_INTELFPGA=3
+    source /opt/altera/aocl-pro-rte/aclrte-linux64/init_opencl.sh
+    ```
+    **NOTE**: It is recommended to create your own script for your system to aid in setting up these environment variables. It will be run each time you need a new terminal or restart your system. 
+
+    The bitstreams for HDDL-F can be found under the `/opt/intel/openvino/bitstreams/a10_vision_design_sg<#>_bitstreams/` directory.<br><br>To program the bitstream use the below command:<br>
+    ```
+    aocl program acl0 /opt/intel/openvino/bitstreams/a10_vision_design_sg<#>_bitstreams/2019R3_PV_PL1_FP16_MobileNet_Clamp.aocx
+    ```
+
+    For more information on programming the bitstreams, please refer to [OpenVINO-Install-Linux-FPGA](https://software.intel.com/en-us/articles/OpenVINO-Install-Linux-FPGA#inpage-nav-11)
+
 1. Go to the _shopper-gaze-monitor-python_ directory and open the Jupyter notebook by running the following command:
 
        cd <path_to_the_shopper-gaze-monitor-python_directory>/Jupyter
@@ -184,8 +209,8 @@ For more information on programming the bitstreams, please refer to https://soft
         
        %env DEVICE = CPU 
        %env CPU_EXTENSION = /opt/intel/openvino/inference_engine/lib/intel64/libcpu_extension_sse4.so
-       %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP32/face-detection-adas-0001.xml
-       %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP32/head-pose-estimation-adas-0001.xml
+       %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP32/face-detection-adas-0001.xml
+       %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001.xml
 
 6. User can set threshold for the detection (CONFIDENCE). Export the environment variables as given below if required else skip this step. If user skips this step, these values are set to default values.
 
@@ -214,8 +239,8 @@ For more information on programming the bitstreams, please refer to https://soft
      * With the floating point precision 16 (FP16), change the environment variables as given below:<br>    
            
            %env DEVICE = GPU
-           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP16/face-detection-adas-0001.xml
-           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP16/head-pose-estimation-adas-0001.xml	
+           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP16/head-pose-estimation-adas-0001.xml	
              
         **FP16**: FP16 is half-precision floating-point arithmetic uses 16 bits. 5 bits for the magnitude and 10 bits for the precision. For more information, [click here](https://en.wikipedia.org/wiki/Half-precision_floating-point_format)
      * **CPU_EXTENSION** environment variable is not required.<br>   
@@ -223,40 +248,42 @@ For more information on programming the bitstreams, please refer to https://soft
      * Change the **%env DEVICE = CPU** to **%env DEVICE = MYRIAD**  
      * The Intel® Neural Compute Stick can only run FP16 models. Hence change the environment variable for the model as shown below. <br>
  
-           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP16/face-detection-adas-0001.xml
-           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP16/head-pose-estimation-adas-0001.xml
+           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP16/head-pose-estimation-adas-0001.xml
       * **CPU_EXTENSION** environment variable is not required.<br>
 3. To run the application on **Intel® Movidius™ VPU**:
      * Change the **%env DEVICE = CPU** to **%env DEVICE = HDDL**
      * The Intel® Movidius™ VPU can only run FP16 models. Change the environment variable for the model as shown below  and the models that are passed to the application must be of data type FP16. <br>
  
-           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP16/face-detection-adas-0001.xml
-           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP16/head-pose-estimation-adas-0001.xml
+           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP16/head-pose-estimation-adas-0001.xml
          
      * **CPU_EXTENSION** environment variable is not required.<br>
 
-4. To run the application on multiple devices: <br>
+	    
+4. To run the application on **Intel® Arria® 10 FPGA**:
+     * Change the **%env DEVICE = CPU** to **%env DEVICE = HETERO:FPGA,CPU**
+     * With the **floating point precision 16 (FP16)**, change the path of the model in the environment variable **MODEL** as given below: <br>
+       
+           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP16/head-pose-estimation-adas-0001.xml
+      * Export the **CPU_EXTENSION** environment variable as shown below:
+         
+            %env CPU_EXTENSION = /opt/intel/openvino/inference_engine/lib/intel64/libcpu_extension_sse4.so
+
+
+5. To run the application on multiple devices: <br>
    For example:
      * Change the **%env DEVICE = CPU** to **%env DEVICE = MULTI:CPU,GPU,MYRIAD**
      * The Intel® Neural Compute Stick can only run FP16 models. Hence change the environment variable for the model as shown below. <br>
  
-           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP16/face-detection-adas-0001.xml
-           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP16/head-pose-estimation-adas-0001.xml
+           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/face-detection-adas-0001/FP16/face-detection-adas-0001.xml
+           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/intel/head-pose-estimation-adas-0001/FP16/head-pose-estimation-adas-0001.xml
      * Export the **CPU_EXTENSION** environment variable as shown below:
          
            %env CPU_EXTENSION = /opt/intel/openvino/inference_engine/lib/intel64/libcpu_extension_sse4.so
 
-<!--	    
-5. To run the application on **FPGA**:
-     * Change the **%env DEVICE = CPU** to **%env DEVICE = HETERO:FPGA,CPU**
-     * With the **floating point precision 16 (FP16)**, change the path of the model in the environment variable **MODEL** as given below: <br>
-       
-           %env MODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/FP16/face-detection-adas-0001.xml
-           %env POSEMODEL=/opt/intel/openvino/deployment_tools/open_model_zoo/tools/downloader/Transportation/object_attributes/headpose/vanilla_cnn/dldt/FP16/head-pose-estimation-adas-0001.xml
-      * Export the **CPU_EXTENSION** environment variable as shown below:
-         
-            %env CPU_EXTENSION = /opt/intel/openvino/inference_engine/lib/intel64/libcpu_extension_sse4.so
--->
+
 
 ## Machine to machine messaging with MQTT
 

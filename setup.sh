@@ -29,8 +29,6 @@ sudo pip3 install numpy jupyter paho-mqtt
 #Download the video
 cd resources
 wget -O face-demographics-walking-and-pause.mp4 https://github.com/intel-iot-devkit/sample-videos/raw/master/face-demographics-walking-and-pause.mp4
-wget -O face-demographics-walking.mp4 https://github.com/intel-iot-devkit/sample-videos/raw/master/face-demographics-walking.mp4
-wget -O head-pose-face-detection-female.mp4 https://github.com/intel-iot-devkit/sample-videos/blob/master/head-pose-face-detection-female.mp4
 
 #Download the model
 cd /opt/intel/openvino/deployment_tools/tools/model_downloader
