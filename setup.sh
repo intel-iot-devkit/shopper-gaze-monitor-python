@@ -21,10 +21,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #Install the dependencies
-apt-get update
-apt-get install python3-pip
-apt-get install mosquitto mosquitto-clients
-pip3 install numpy jupyter paho-mqtt
+# apt-get update
+# apt-get install python3-pip
+# apt-get install mosquitto mosquitto-clients
+# pip3 install numpy jupyter paho-mqtt
 
 #Download the video
 cd resources
