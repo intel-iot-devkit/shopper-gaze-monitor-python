@@ -21,10 +21,10 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #Install the dependencies
-sudo apt-get update
-sudo apt-get install python3-pip
-sudo apt-get install mosquitto mosquitto-clients
-sudo pip3 install numpy jupyter paho-mqtt
+apt-get update
+apt-get install python3-pip
+apt-get install mosquitto mosquitto-clients
+pip3 install numpy jupyter paho-mqtt
 
 #Download the video
 cd resources
@@ -32,5 +32,5 @@ wget -O face-demographics-walking-and-pause.mp4 https://github.com/intel-iot-dev
 
 #Download the model
 cd /opt/intel/openvino/deployment_tools/tools/model_downloader
-sudo ./downloader.py --name face-detection-adas-0001
-sudo ./downloader.py --name head-pose-estimation-adas-0001
+./downloader.py --name face-detection-adas-0001
+./downloader.py --name head-pose-estimation-adas-0001
